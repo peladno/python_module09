@@ -4,6 +4,7 @@ from datetime import datetime
 
 
 class SpaceStation(BaseModel):
+    """Validation model"""
     station_id: str = Field(..., min_length=1, max_length=30)
     name: str = Field(..., min_length=1, max_length=50)
     crew_size: int = Field(..., ge=1, le=20)
@@ -11,10 +12,11 @@ class SpaceStation(BaseModel):
     oxygen_level: float = Field(..., ge=0.0, le=100.0)
     last_maintenance: datetime
     is_operational: bool = Field(default=True)
-    notes: str | None = None
+    notes: str | None = Field(default=None)
 
 
 def test_valid() -> None:
+    """Testing with correct type data"""
     try:
         station = SpaceStation(
             station_id="1990JP",
@@ -42,6 +44,7 @@ def test_valid() -> None:
 
 
 def test_invalid() -> None:
+    """Test with incorrect type data"""
     try:
         station = SpaceStation(
             station_id="123",
