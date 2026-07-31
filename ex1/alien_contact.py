@@ -18,7 +18,7 @@ class ContactType(str, Enum):
 class AlienContact(BaseModel):
     contact_id: str = Field(min_length=5, max_length=15)
     timestamp: datetime
-    location: str = Field(max_length=3, max_digits=100)
+    location: str = Field(min_length=3, max_length=100)
     contact_type: ContactType
     signal_strenght: float = Field(ge=0.0, le=10.0)
     duration_minutes: int = Field(ge=1, le=1440)
@@ -41,8 +41,10 @@ class AlienContact(BaseModel):
             self.contact_type == ContactType.TELEPATHIC
             and self.witness_count < 3
         ):
-            raise ValueError("Telepathic contact requires "
+            raise ValueError(f"{ContactType.TELEPATHIC.value} "
+                             "contact requires "
                              "at least 3 witnesses")
+        # testear esto
         if not self.message_recieved and self.signal_strenght <= 7.0:
             raise ValueError("Strong signals (> 7.0) should include "
                              "received messages")
@@ -64,8 +66,59 @@ def test_valid() -> None:
             is_verified=True
         )
 
-        print("Valid contact report:")
-        print("ID", alien_contact.contact_id)
+        print("ID:", alien_contact.contact_id)
+        print("Type:", alien_contact.contact_type.value)
+        print("Location:", alien_contact.location)
+        print(f"Signal: {alien_contact.signal_strenght}/10")
+        print(f"Duration: {alien_contact.duration_minutes} minutes")
+        print("Witnesses:", alien_contact.witness_count)
+        print("Message:", alien_contact.message_recieved)
+
     except ValidationError as error:
         for e in error.errors():
-            print(f"[Error] {e['loc'][0]}:", e['msg'])
+            if e['loc']:
+                print(f"[Error] {e['loc'][0]}:", e['msg'])
+            else:
+                print(f"[Error] {list(e['input'])[0]}:",
+                      e['msg'].split(",")[1].strip())
+
+
+def test_invalid() -> None:
+    try:
+        alien_contact = AlienContact(
+            contact_id="AC4242dd",
+            timestamp=datetime.now(),
+            location="Tokyo",
+            contact_type=ContactType.TELEPATHIC,
+            duration_minutes=30,
+            signal_strenght=7.2,
+            witness_count=2,
+            message_recieved="OMG",
+            is_verified=True
+        )
+
+        print("ID:", alien_contact.contact_id)
+        print("Type:", alien_contact.contact_type.value)
+        print("Location:", alien_contact.location)
+        print(f"Signal: {alien_contact.signal_strenght}/10")
+        print(f"Duration: {alien_contact.duration_minutes} minutes")
+        print("Witnesses:", alien_contact.witness_count)
+        print("Message:", alien_contact.message_recieved)
+
+    except ValidationError as error:
+        for e in error.errors():
+            if e['loc']:
+                print(f"[Error] {e['loc'][0]}:", e['msg'])
+            else:
+                print(f"[Error] {list(e['input'])[0]}:",
+                      e['msg'].split(",")[1].strip())
+
+
+if __name__ == "__main__":
+    print("Alien Contact Log Validation")
+    print("=======================================")
+    print("Valid contact report:")
+    test_valid()
+    print("\n=======================================")
+    print("Invalid contact report:")
+    test_invalid()
