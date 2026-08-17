@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-from pydantic import BaseModel, Field, ValidationError, model_validator
+from pydantic import (
+    BaseModel, Field, ValidationError, model_validator
+)
 from enum import Enum
 from datetime import datetime
 from typing_extensions import Self
@@ -46,8 +48,10 @@ class AlienContact(BaseModel):
                              "at least 3 witnesses")
         # testear esto
         if not self.message_recieved and self.signal_strenght <= 7.0:
-            raise ValueError("Strong signals (> 7.0) should include "
-                             "received messages")
+            raise ValueError(
+                "Strong signals (> 7.0) should include "
+                "received messages"
+            )
 
         return self
 
