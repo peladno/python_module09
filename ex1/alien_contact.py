@@ -46,7 +46,7 @@ class AlienContact(BaseModel):
             raise ValueError(f"{ContactType.TELEPATHIC.value} "
                              "contact requires "
                              "at least 3 witnesses")
-        # testear esto
+
         if not self.message_recieved and self.signal_strenght <= 7.0:
             raise ValueError(
                 "Strong signals (> 7.0) should include "
@@ -95,9 +95,9 @@ def test_invalid() -> None:
             location="Tokyo",
             contact_type=ContactType.TELEPATHIC,
             duration_minutes=30,
-            signal_strenght=7.2,
-            witness_count=2,
-            message_recieved="OMG",
+            signal_strenght=6.9,
+            witness_count=3,
+            message_recieved=None,
             is_verified=True
         )
 

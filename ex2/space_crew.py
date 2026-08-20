@@ -1,15 +1,13 @@
 from datetime import datetime
 from enum import Enum
-from typing import Self
+from typing_extensions import Self
 from pydantic import (
     BaseModel, Field, ValidationError, model_validator
     )
 
 
 class Rank(str, Enum):
-    """
-    Crew ranks
-    """
+    """Crew ranks"""
     CADET = "cadet"
     OFFICER = "officer"
     LIEUTENANT = "lieutenant"
@@ -18,6 +16,7 @@ class Rank(str, Enum):
 
 
 class CrewMember(BaseModel):
+    """Crew member model"""
     member_id: str = Field(min_length=3, max_length=10)
     name: str = Field(min_length=2, max_length=50)
     rank: Rank
@@ -28,6 +27,7 @@ class CrewMember(BaseModel):
 
 
 class SpaceMission(BaseModel):
+    """Sapce mission model"""
     mission_id: str = Field(min_length=5, max_length=15)
     mission_name: str = Field(min_length=3, max_length=300)
     destination: str = Field(min_length=3, max_length=50)
