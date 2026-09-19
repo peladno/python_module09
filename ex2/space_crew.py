@@ -29,13 +29,13 @@ class CrewMember(BaseModel):
 class SpaceMission(BaseModel):
     """Sapce mission model"""
     mission_id: str = Field(min_length=5, max_length=15)
-    mission_name: str = Field(min_length=3, max_length=300)
+    mission_name: str = Field(min_length=3, max_length=100)
     destination: str = Field(min_length=3, max_length=50)
     launch_date: datetime
     duration_days: int = Field(ge=1, le=3650)
     crew: list[CrewMember] = Field(min_length=1, max_length=12)
     mission_status: str = Field(default="planned")
-    budget_millions: float = Field(ge=1.0, le=1000.0)
+    budget_millions: float = Field(ge=1.0, le=10000.0)
 
     @model_validator(mode='after')
     def validation_rules(self) -> Self:
