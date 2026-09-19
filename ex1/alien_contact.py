@@ -59,7 +59,7 @@ class AlienContact(BaseModel):
 def test_valid() -> None:
     try:
         alien_contact = AlienContact(
-            contact_id="AC4242",
+            contact_id="AC4241",
             timestamp=datetime.now(),
             location="Tokyo",
             contact_type=ContactType.PHYSICAL,
