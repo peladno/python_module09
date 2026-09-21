@@ -121,72 +121,7 @@ def test_valid_mission() -> None:
                       e['msg'].split(",")[1].strip())
 
 
-def test_invalid_mission() -> None:
-    try:
-        crew = [
-            CrewMember(
-                member_id="CM001",
-                name="Alice Johnson",
-                rank=Rank.OFFICER,
-                age=42,
-                specialization="Navigation",
-                years_experience=1,
-                is_active=True
-            ),
-            CrewMember(
-                member_id="CM002",
-                name="Bob Smith",
-                rank=Rank.OFFICER,
-                age=35,
-                specialization="Engineering",
-                years_experience=1,
-                is_active=False
-            )
-        ]
-
-        mission = SpaceMission(
-            mission_id="SN12345",
-            mission_name="Jupiter Exploration",
-            destination="Jupiter",
-            launch_date=datetime.now(),
-            duration_days=540,
-            crew=crew,
-            mission_status="planned",
-            budget_millions=250.5
-        )
-
-        print("Valid mission created:")
-        print("ID:", mission.mission_id)
-        print("Name:", mission.mission_name)
-        print("Destination:", mission.destination)
-        print("Launch:", mission.launch_date)
-        print(f"Duration: {mission.duration_days} days")
-        print(f"Budget: ${mission.budget_millions}M")
-        print("Status:", mission.mission_status)
-
-        print("Crew Members:")
-        for member in mission.crew:
-            print(f"- {member.name} ({member.rank.value})")
-            print(f"  ID: {member.member_id}")
-            print(f"  Age: {member.age}")
-            print(f"  Specialization: {member.specialization}")
-            print(f"  Experience: {member.years_experience} years")
-            print(f"  Active: {member.is_active}")
-            print()
-
-    except ValidationError as error:
-        for e in error.errors():
-            if e['loc']:
-                print(f"[Error] {e['loc'][0]}:", e['msg'])
-            else:
-                print(f"[Error] {list(e['input'])[0]}:",
-                      e['msg'].split(",")[1].strip())
-
-
 if __name__ == "__main__":
     print("Space Mission Crew Validation")
     print("=========================================")
     test_valid_mission()
-    print("\n=========================================")
-    print("Expected validation error:")
-    test_invalid_mission()

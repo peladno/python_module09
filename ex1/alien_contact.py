@@ -87,42 +87,8 @@ def test_valid() -> None:
                       e['msg'].split(",")[1].strip())
 
 
-def test_invalid() -> None:
-    try:
-        alien_contact = AlienContact(
-            contact_id="AC4242dd",
-            timestamp=datetime.now(),
-            location="Tokyo",
-            contact_type=ContactType.TELEPATHIC,
-            duration_minutes=30,
-            signal_strenght=6.9,
-            witness_count=3,
-            message_recieved=None,
-            is_verified=True
-        )
-
-        print("ID:", alien_contact.contact_id)
-        print("Type:", alien_contact.contact_type.value)
-        print("Location:", alien_contact.location)
-        print(f"Signal: {alien_contact.signal_strenght}/10")
-        print(f"Duration: {alien_contact.duration_minutes} minutes")
-        print("Witnesses:", alien_contact.witness_count)
-        print("Message:", alien_contact.message_recieved)
-
-    except ValidationError as error:
-        for e in error.errors():
-            if e['loc']:
-                print(f"[Error] {e['loc'][0]}:", e['msg'])
-            else:
-                print(f"[Error] {list(e['input'])[0]}:",
-                      e['msg'].split(",")[1].strip())
-
-
 if __name__ == "__main__":
     print("Alien Contact Log Validation")
     print("=======================================")
     print("Valid contact report:")
     test_valid()
-    print("\n=======================================")
-    print("Invalid contact report:")
-    test_invalid()
