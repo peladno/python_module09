@@ -19,39 +19,53 @@ def test_valid() -> None:
     """Testing with correct type data"""
     try:
         station = SpaceStation(
-            station_id="1990JP",
-            name="Yuki",
-            crew_size=20,
-            power_level=23.3,
-            oxygen_level=100,
+            station_id="ISS001",
+            name="International Space Station",
+            crew_size=6,
+            power_level=85.5,
+            oxygen_level=92.3,
             last_maintenance=datetime.now(),
-            notes="Lorem ipsum dolor sit amet, "
-            "consectetuer adipiscing elit. Aenean "
-            "commodo ligula eget dolor. Aenean massa. "
-            "Cum sociis natoque penatibus et magnis dis "
-            "parturient montes, nascetur ridiculus mus. Donec qu",
-            is_operational=False
         )
 
         print("ID:", station.station_id)
         print("Name:", station.name)
-        print(f"Crew size: {station.crew_size} people")
-        print(f"Power level: {station.power_level}%")
-        print(f"Oxygen level: {station.oxygen_level}%")
-        print("Last maintenance:", station.last_maintenance)
-        print("Status:", "Operational" if station.is_operational
-              else "Non-operational")
-        print("Notes:", station.notes)
+        print(f"Crew: {station.crew_size} people")
+        print(f"Power: {station.power_level}%")
+        print(f"Oxygen: {station.oxygen_level}%")
+        print(
+            "Status:",
+            "Operational" if station.is_operational else "Non-operational",
+        )
     except ValidationError as error:
         for e in error.errors():
             print(f"[Error] {e['loc'][0]}:", e['msg'])
 
 
+def test_invalid() -> None:
+    """Testing with incorrect type data"""
+    try:
+        SpaceStation(
+            station_id="ISS001",
+            name="International Space Station",
+            crew_size=25,
+            power_level=85.5,
+            oxygen_level=92.3,
+            last_maintenance=datetime.now(),
+        )
+    except ValidationError as error:
+        for e in error.errors():
+            print(e['msg'])
+
+
 def main() -> None:
+    """Demonstration function"""
     print("Space Station Data Validation")
-    print("======================================")
+    print("========================================")
+    print("Valid station created:")
     test_valid()
-    print()
+    print("========================================")
+    print("Expected validation error:")
+    test_invalid()
 
 
 if __name__ == "__main__":
